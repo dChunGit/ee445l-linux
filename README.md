@@ -4,7 +4,7 @@ A complete repository for writing, compiling and flashing code for the TI Stella
 
 ![TM4C123GXL](https://github.com/jishminor/ee445l-linux/blob/master/TivaWare/.metadata/images/TivaWare.png)
 
-Tested on OS X. Should work on most GNU/Linux/POSIX environments.
+Tested on OS X and Ubuntu 16.04. Should work on most GNU/Linux/POSIX environments.
 
 ## Requirements
 
@@ -39,8 +39,14 @@ Follow the instructions in the next section to install the required packages.
         ```
 
 2. In the root directory of your repo, run
+    
+    For OS X:
     ```
-    $ bash setup.sh
+    $ bash setup-osx.sh
+    ```
+    For Linux:
+    ```
+    $ bash setup-linux.sh
     ```
     to install all dependencies.
 3. If prompted to override rwxr-xr-x  root/admin for /usr/local/bin/lm4flash, enter y and press enter.
@@ -81,7 +87,7 @@ The general workflow for beginning a new project is a follows:
 5. Add all the starter files you need to the lab1 directory and get coding!
 
 
-**Good Practice**: The shared directory is great to for placing the modules you write that can be shared across projects.
+**Good Practice**: The shared directory is great for placing the modules you write that can be shared across projects.
 There's already a few in there from ValvanoWare which you will find useful through the semester.
 To include files from this directory in your projects just place a
 ```c
@@ -96,13 +102,47 @@ $ make
 ```
 
 To flash the TM4C:
-```
-$ make flash
-```
+    
+For OS X:
+    ```
+    $ make flash
+    ```
+    
+For Linux:
+    ```
+    $ sudo make flash
+    ```
 
 To clean up the directory:
 ```
 $ make clean
+```
+
+### Debugger
+The debugger requires gdb-arm-none-eabi and openocd in addition to the other dependencies. They should also be installed by the install script.  
+
+To start debugging, run the following commands in your project folder:  
+```
+$ sudo make flash
+$ make debug
+```
+
+Then run the following GDB commands:  
+```
+(gdb) target remote localhost:3333
+(gdb) monitor reset halt
+(gdb) load
+```
+It might print an message in the middle, but it seems to not be a problem as long as you flash the board with the project you're debugging beforehand.  
+Now everything is ready to go like a normal GDB session. Set any desired breakpoints and then type `continue` or `c` to continue running the program.  
+
+When your done with your session:
+```
+(gdb) q
+```
+and don't forget to kill openocd:
+```
+sudo pkill openocd
 ```
 
 ## Authors
